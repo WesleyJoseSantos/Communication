@@ -23,7 +23,7 @@ public:
     virtual void task() = 0;
     virtual void sendString(String string) = 0;
     virtual void sendBytes(uint8_t *bytes, uint8_t size) = 0;
-    virtual void sendJson(IJson json) = 0;
+    virtual void sendJson(IJson *json) = 0;
     virtual int dataAvailable() = 0;
     virtual String getString() = 0;
     virtual void getBytes(uint8_t *bytes, uint8_t size) = 0;

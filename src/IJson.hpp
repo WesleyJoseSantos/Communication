@@ -20,11 +20,6 @@ private:
 public:
     IJson(){}
 
-    virtual void fromJson(String json){
-
-    };
-
-    virtual String toJson(){
-        return "";
-    };
+    virtual void fromJson(String json) = 0;
+    virtual String toJson() = 0;
 };

@@ -12,7 +12,7 @@
 #pragma once
 
 #include "ArduinoJson.h"
-#include "IJson.hpp"
+#include "JsonMsg.hpp"
 
 class DigitalControlData : public JsonMsg
 {

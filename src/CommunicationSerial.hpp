@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Communication.h"
+#include "Stream.h"
 
 class CommunicationSerial : public ICommunication
 {
@@ -39,8 +40,8 @@ public:
         }
     }
 
-    void sendJson(IJson json) override {
-        stream->println(json.toJson());
+    void sendJson(IJson *json) override {
+        stream->println(json->toJson());
     }
 
     int dataAvailable(){
