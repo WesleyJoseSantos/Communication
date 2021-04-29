@@ -9,5 +9,7 @@
  * 
  */
 
-#include "ICommunication/ICommunication.hpp"
-#include "CommunicationSerial/CommunicationSerial.hpp"
+#include "IJson.hpp"
+#include "JsonMsg.hpp"
+#include "ICommunication.hpp"
+#include "CommunicationSerial.hpp"

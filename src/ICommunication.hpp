@@ -10,8 +10,8 @@
  */
 
 #pragma once
- 
-#include "IJson.h"
+
+#include "IJson.hpp"
 #include "WString.h"
 
 class ICommunication
