@@ -11,8 +11,7 @@
 
 #pragma once
 
-#ifdef  ARDUINOJSON_NAMESPACE
-
+#include "ArduinoJson.h"
 #include "IJson.hpp"
 
 class JsonMsg : public IJson
@@ -42,5 +41,3 @@ public:
         return json;
     }
 };
-
-#endif  //ARDUINOJSON_NAMESPACE
