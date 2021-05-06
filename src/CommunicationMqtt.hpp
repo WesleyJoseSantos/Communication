@@ -17,12 +17,24 @@
 #include "Communication.h"
 #include <MQTT.h>
 
+#define DEFAULT_RX_TOPIC "/defaultRxTopic"
+#define DEFAULT_TX_TOPIC "/defaultTxTopic"
+#define TASK_TIMER 10
+
 class CommunicationMqtt : public ICommunication
 {
 private:
     MQTTClient *client;
-    String topicRx;
-    String topicTx;
+    static String topicRx;
+    static String topicTx;
+    static String data;
+    static int dataReceived;
+
+    static void onMessage(String &topic, String &payload){
+        dataReceived = payload.length();
+        topicRx = topic;
+        data = payload;
+    }
 
 public:
     CommunicationMqtt() {
@@ -31,11 +43,9 @@ public:
 
     void init(MQTTClient *client){
         this->client = client;
-
-        //this->client->onMessage(); O QUE FAZER???????
-
-        this->topicRx = "/defaultRxTopic";
-        this->topicTx = "/defaultTxTopic";
+        this->topicRx = DEFAULT_RX_TOPIC;
+        this->topicTx = DEFAULT_TX_TOPIC;
+        this->client->onMessage(this->onMessage);
     }
 
     void task(){
@@ -69,24 +79,23 @@ public:
     }
 
     int dataAvailable(){
-
+        return dataReceived;
     }
 
     String getString(){
-
+        return data;
     }
 
     void getBytes(uint8_t *bytes, uint8_t size){
-
+        for (size_t i = 0; i < size; i++)
+        {
+            bytes[i] = data[i];
+        }
     }
 
     void getJson(IJson *json){
         String data;
         json->fromJson(data);
-    }
-
-    void messageReceived(String &topic, String &payload){
-
     }
 };
 
