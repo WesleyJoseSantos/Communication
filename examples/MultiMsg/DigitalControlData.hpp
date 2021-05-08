@@ -1,5 +1,5 @@
 /**
- * @file PwmControlData.hpp
+ * @file DigitalControlData.hpp
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -14,20 +14,20 @@
 #include "ArduinoJson.h"
 #include "JsonMsg.hpp"
 
-class PwmControlData : public JsonMsg
+class DigitalControlData : public JsonMsg
 {
 public:
     int pin;
-    int value;
+    bool status;
 
-    PwmControlData(){}
+    DigitalControlData(){}
 
     void fromJson(String json){
         StaticJsonDocument<64> doc;
         deserializeJson(doc, json);
         
         if(doc.containsKey("pin")) pin = doc["pin"];
-        if(doc.containsKey("value")) value = doc["value"];
+        if(doc.containsKey("status")) status = doc["status"];
         if(doc.containsKey("msgId")) msgId = doc["msgId"];
     }
 
@@ -36,7 +36,7 @@ public:
         String json;
 
         doc["pin"] = pin;
-        doc["value"] = value;
+        doc["status"] = status;
         doc["msgId"] = msgId;
 
         serializeJson(doc, json);
