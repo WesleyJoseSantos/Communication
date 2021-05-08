@@ -17,9 +17,8 @@
 #include "Communication.h"
 #include <MQTT.h>
 
-#define DEFAULT_RX_TOPIC "/defaultRxTopic"
-#define DEFAULT_TX_TOPIC "/defaultTxTopic"
-#define TASK_TIMER 10
+#define DEFAULT_RX_TOPIC "/mac/rxTopic"
+#define DEFAULT_TX_TOPIC "/mac/txTopic"
 
 class CommunicationMqtt : public ICommunication
 {
@@ -41,11 +40,14 @@ public:
 
     }
 
-    void init(MQTTClient *client){
+    void init(MQTTClient *client, String mac){
         this->client = client;
+        this->client->onMessage(this->onMessage);
+        
         this->topicRx = DEFAULT_RX_TOPIC;
         this->topicTx = DEFAULT_TX_TOPIC;
-        this->client->onMessage(this->onMessage);
+        this->topicRx.replace("mac", mac);
+        this->topicTx.replace("mac", mac);
     }
 
     void task(){
@@ -83,10 +85,12 @@ public:
     }
 
     String getString(){
+        dataReceived = 0;
         return data;
     }
 
     void getBytes(uint8_t *bytes, uint8_t size){
+        dataReceived -= size;
         for (size_t i = 0; i < size; i++)
         {
             bytes[i] = data[i];
@@ -94,9 +98,15 @@ public:
     }
 
     void getJson(IJson *json){
+        dataReceived = 0;
         String data;
         json->fromJson(data);
     }
 };
+
+String CommunicationMqtt::topicRx;
+String CommunicationMqtt::topicTx;
+String CommunicationMqtt::data;
+int CommunicationMqtt::dataReceived;
 
 #endif  //!__COMMUNICATIONMQTT__H__

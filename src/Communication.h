@@ -13,3 +13,4 @@
 #include "JsonMsg.hpp"
 #include "ICommunication.hpp"
 #include "CommunicationSerial.hpp"
+#include "CommunicationMqtt.hpp"
