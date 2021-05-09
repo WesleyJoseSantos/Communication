@@ -14,3 +14,4 @@
 #include "ICommunication.hpp"
 #include "CommunicationSerial.hpp"
 #include "CommunicationMqtt.hpp"
+#include "CommunicationHttpServer.hpp"
