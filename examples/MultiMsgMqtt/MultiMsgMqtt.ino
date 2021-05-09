@@ -27,11 +27,11 @@ PwmControlData pwmControl;
 JsonMsg control;
 CommunicationMqtt comm;
 
-const char ssid[] = "cabo canaveral 2g";
-const char pass[] = "16192020";
-
 WiFiClient net;
 MQTTClient client;
+
+const char ssid[] = "cabo canaveral 2g";
+const char pass[] = "16192020";
 
 void connect(){
   Serial.print("checking wifi...");
@@ -46,11 +46,6 @@ void connect(){
     delay(1000);
   }
 
-  comm.sendString("Connected!");
-  Serial.println("\nconnected!");  
-
-  client.subscribe(comm.getTopic());
-  Serial.println(comm.getTopic());
 }
 
 void setup() {
@@ -58,21 +53,27 @@ void setup() {
   WiFi.begin(ssid, pass);
 
   client.begin("public.cloud.shiftr.io", net);
-  comm.init(&client, WiFi.macAddress());
-
   connect();
+  Serial.println("connected!");
+
+  comm.init(&client, WiFi.macAddress());
+  comm.sendString("Connected!");
+
+  Serial.println(comm.getTopic());
 }
 
-void loop() {
-  // Read parameters if is available
-  comm.task();
-
+void clientTask(){
   client.loop();
   delay(10);  // <- fixes some issues with WiFi stability
 
   if (!client.connected()) {
     connect();
   }
+}
+
+void loop() {
+  clientTask();  
+  comm.task();
 
   if (comm.dataAvailable())
   {

@@ -9,9 +9,6 @@
  * 
  */
 
-#ifndef __COMMUNICATIONMQTT__H__
-#define __COMMUNICATIONMQTT__H__
-
 #pragma once
 
 #include "Communication.h"
@@ -40,6 +37,19 @@ public:
 
     }
 
+    void init(MQTTClient *client){
+        this->client = client;
+        this->client->onMessage(this->onMessage);
+    }
+
+    void init(MQTTClient *client, String topicRx, String topicTx){
+        this->client = client;
+        this->client->onMessage(this->onMessage);
+        this->topicRx = topicRx;
+        this->topicTx = topicTx;
+        this->client->subscribe(this->topicRx);
+    }
+
     void init(MQTTClient *client, String mac){
         this->client = client;
         this->client->onMessage(this->onMessage);
@@ -48,6 +58,8 @@ public:
         this->topicTx = DEFAULT_TX_TOPIC;
         this->topicRx.replace("mac", mac);
         this->topicTx.replace("mac", mac);
+
+        this->client->subscribe(this->topicRx);
     }
 
     void task(){
@@ -56,6 +68,7 @@ public:
 
     void setTopic(String topic){
         this->topicTx = topic;
+        this->client->subscribe(this->topicRx);
     }
 
     String getTopic(){
@@ -99,7 +112,6 @@ public:
 
     void getJson(IJson *json){
         dataReceived = 0;
-        String data;
         json->fromJson(data);
     }
 };
@@ -108,5 +120,3 @@ String CommunicationMqtt::topicRx;
 String CommunicationMqtt::topicTx;
 String CommunicationMqtt::data;
 int CommunicationMqtt::dataReceived;
-
-#endif  //!__COMMUNICATIONMQTT__H__
